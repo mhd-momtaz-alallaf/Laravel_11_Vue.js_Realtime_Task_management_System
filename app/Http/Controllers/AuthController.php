@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewUserCreated;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,7 @@ class AuthController extends Controller
         $user_fields = $request->all();
 
         $errors = Validator::make($user_fields, [
-            'email' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|max:8',
         ]);
 
@@ -24,14 +25,20 @@ class AuthController extends Controller
             return response($errors->errors()->all(), 422);
         }
 
-        User::create([
+        $user = User::create([
             'email' => $user_fields['email'],
             'password' => bcrypt($user_fields['password']),
             'isValidEmail' => User::IS_INVALID_EMAIL,
             'remember_token' => $this->generateRandomString(),
         ]);
 
-        return response(['message' => 'User Created Successfully!'], 200);
+        // sending an email immediately to the user after creating a user event.
+        NewUserCreated::dispatch($user);
+
+        return response([
+            'message' => 'User Created Successfully!',
+            'user' => $user,
+        ], 200);
     }
 
     // generating a random string for use it as the user remember token.
