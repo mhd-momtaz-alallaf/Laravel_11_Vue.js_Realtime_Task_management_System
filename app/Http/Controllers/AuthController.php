@@ -41,6 +41,15 @@ class AuthController extends Controller
         ], 200);
     }
 
+    // validating the user email.
+    public function validateEmail($token)
+    {
+        User::where('remember_token', $token)
+            ->update(['isValidEmail' => User::IS_VALID_EMAIL]);
+
+        return redirect('/login');
+    }
+
     // generating a random string for use it as the user remember token.
     function generateRandomString()
     {
