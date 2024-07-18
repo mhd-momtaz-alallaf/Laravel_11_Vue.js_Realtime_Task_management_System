@@ -17,7 +17,7 @@
             <p>Hello, <br/><br/>
                 we have sent to you this email to check if this Email : <a href="#">{{$user->email}}</a> you provide is a valid one; click on the link to verifiy it.
 
-                <a style="font-weight:bold;color:blue" target="_blank" href="{{env('APP_URL')}}/check_email/{{$user->remember_token}}">
+                <a style="font-weight:bold;color:blue" target="_blank" href="{{env('APP_URL')}}/check-email/{{$user->remember_token}}">
                     Check my email
                 </a>
             </p>
