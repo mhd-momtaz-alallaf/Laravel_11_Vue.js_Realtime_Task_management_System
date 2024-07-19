@@ -20,3 +20,6 @@ Route::post('/projects', [ProjectController::class, 'store']);
 
 // Update Project put route.
 Route::put('/projects/{project}', [ProjectController::class, 'update']);
+
+// Getting all the projects route.
+Route::get('/projects', [ProjectController::class, 'index']);
