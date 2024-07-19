@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TaskProgress extends Model
 {
     use HasFactory;
+
+    const NOT_PINNED_ON_DASHBOARD = 0;
+    const PINNED_ON_DASHBOARD = 1;
 }
