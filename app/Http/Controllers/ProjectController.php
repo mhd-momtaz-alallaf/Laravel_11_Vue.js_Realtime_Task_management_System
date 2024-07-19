@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    // showing all projects.
+    public function index(Request $request)
+    {
+        $projects = Project::with(['task_progress']);
+
+        return response(['data' => $projects->paginate(10)], 200);
+    }
+
     // Create new project.
     public function store(ProjectRequest $request)
     {
