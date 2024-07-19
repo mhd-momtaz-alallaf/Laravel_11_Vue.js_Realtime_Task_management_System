@@ -41,6 +41,50 @@ class AuthController extends Controller
         ], 200);
     }
 
+    private $secretKey = "qQKPjndxljuYQi/POiXJa8O19nVO/vTf/DpXO541g=qQKPjndxljuYQi/POiXJa8O19nVO/vTf/DpXO541g=";
+
+    public function login(Request $request)
+    {
+        $user_fields = $request->all();
+
+        $errors = Validator::make($user_fields, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if($errors->fails()){
+            return response($errors->errors()->all(), 422);
+        }
+
+        // searching for the user email in the database.
+        $user = User::where('email', $user_fields['email'])->first();
+
+        if($user){
+            if($user->isValidEmail !== User::IS_VALID_EMAIL){
+                NewUserCreated::dispatch($user);
+
+                return response([
+                    'message' => 'please check your inbox to validate your email first!',
+                    'isLoggedIn' => false,
+                ], 422);
+            }
+        }
+
+        if(!$user || !Hash::check($user_fields['password'], $user->password)){
+            return response([
+                'message' => 'email or password are invalid!',
+                'isLoggedIn' => false,
+            ], 422);
+        }
+
+        return response([
+            'message' => 'You are logged in!',
+            'isLoggedIn' => true,
+            'user' => $user,
+            'token' => $user->createToken($this->secretKey)->plainTextToken,
+        ], 200);
+    }
+
     // validating the user email.
     public function validateEmail($token)
     {
