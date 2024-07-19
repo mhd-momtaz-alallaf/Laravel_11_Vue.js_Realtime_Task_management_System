@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'status',
+        'startDate',
+        'endDate',
+    ];
+
+    const NOT_STARTED = 0;
+    const PENDING = 1;
+    const COMPLETED = 2;
 }
