@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('task_progress', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained('projects');
+            $table->integer('pinned_on_dashboard');
+            $table->string('progress');
             $table->timestamps();
         });
     }
