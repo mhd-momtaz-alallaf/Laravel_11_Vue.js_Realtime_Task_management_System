@@ -17,3 +17,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Store Project post route.
 Route::post('/projects', [ProjectController::class, 'store']);
+
+// Update Project put route.
+Route::put('/projects/{project}', [ProjectController::class, 'update']);
