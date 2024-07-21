@@ -9,20 +9,25 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-// Register Post route.
-Route::post('/register', [AuthController::class, 'register']);
+Route::controller(AuthController::class)->group(function(){
+    // Register Post route.
+    Route::post('/register', 'register');
 
-// Login Post route.
-Route::post('/login', [AuthController::class, 'login']);
+    // Login Post route.
+    Route::post('/login', 'login');
+});
 
-// Store Project post route.
-Route::post('/projects', [ProjectController::class, 'store']);
+Route::controller(ProjectController::class)->group(function(){
+    // Storing Project post route.
+    Route::post('/projects', 'store');
 
-// Update Project put route.
-Route::put('/projects/{project}', [ProjectController::class, 'update']);
+    // Updating Project put route.
+    Route::put('/projects/{project}', 'update');
 
-// Getting all the projects route.
-Route::get('/projects', [ProjectController::class, 'index']);
+    // Getting all the projects route.
+    Route::get('/projects', 'index');
 
-// pinning a project on dashboard route.
-Route::post('/projects/{project}/pin-on-dashboard', [ProjectController::class, 'pinProjectOnDashboard']);
+    // pinning a project on dashboard route.
+    Route::post('/projects/{project}/pin-on-dashboard', 'pinProjectOnDashboard');
+});
+
