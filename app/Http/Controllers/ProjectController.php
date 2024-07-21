@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
+use App\Models\TaskProgress;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -22,12 +23,20 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
 
+        // storing the project in the database.
         $project = Project::create([
             'name' => $validated['name'],
             'startDate' => $validated['startDate'],
             'endDate' => $validated['endDate'],
             'status' => Project::NOT_STARTED,
             'slug' => Project::generateSlug($validated['name']),
+        ]);
+
+        // adding the initial project progress value (associating the Project Model with the TaskProgress Model).
+        TaskProgress::create([
+            'project_id' => $project->id,
+            'pinned_on_dashboard' => TaskProgress::NOT_PINNED_ON_DASHBOARD,
+            'progress' => TaskProgress::INITIAL_PROJECT_PROGRESS_PERCENT,
         ]);
 
         return response([
