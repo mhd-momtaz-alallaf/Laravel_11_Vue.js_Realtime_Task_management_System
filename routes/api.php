@@ -23,3 +23,6 @@ Route::put('/projects/{project}', [ProjectController::class, 'update']);
 
 // Getting all the projects route.
 Route::get('/projects', [ProjectController::class, 'index']);
+
+// pinning a project on dashboard route.
+Route::post('/projects/{project}/pin-on-dashboard', [ProjectController::class, 'pinProjectOnDashboard']);
