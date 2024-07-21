@@ -38,4 +38,16 @@ class MemberController extends Controller
 
         return response()->json(['message' => 'Member created Successfully!'], 200);
     }
+
+    public function update(MemberRequest $request, Member $member)
+    {
+        $validated = $request->validated();
+
+        $member->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        return response()->json(['message' => 'Member updated Successfully!'], 200);
+    }
 }
