@@ -74,4 +74,14 @@ class ProjectController extends Controller
             'message' => 'Project updated successfully!',
         ], 200);
     }
+
+    // pinning a project on the dashboard.
+    public function pinProjectOnDashboard(Project $project)
+    {
+        TaskProgress::where('project_id', $project->id)->update([
+            'pinned_on_dashboard' => TaskProgress::PINNED_ON_DASHBOARD,
+        ]);
+
+        return response()->json(['message' => 'Project has pinned on dashboard successfully!'], 200);
+    }
 }
