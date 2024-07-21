@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MemberRequest;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,5 +25,17 @@ class MemberController extends Controller
         $members->orderBy('id', 'desc');
 
         return response()->json(['data' => $members->paginate(10)], 200);
+    }
+
+    public function store(MemberRequest $request)
+    {
+        $validated = $request->validated();
+
+        $member = Member::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        return response()->json(['message' => 'Member created Successfully!'], 200);
     }
 }
