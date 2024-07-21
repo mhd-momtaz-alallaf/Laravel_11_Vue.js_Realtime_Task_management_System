@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,17 @@ Route::controller(ProjectController::class)->group(function(){
     // Getting all the projects route.
     Route::get('/projects', 'index');
 
-    // pinning a project on dashboard route.
+    // Pinning a project on dashboard route.
     Route::post('/projects/{project}/pin-on-dashboard', 'pinProjectOnDashboard');
 });
 
+Route::controller(MemberController::class)->group(function(){
+    // Getting all the members.
+    Route::get('/members', 'index');
+
+    // storing a new member.
+    Route::post('/members', 'store');
+
+    // Updating a member.
+    Route::put('/members/{member}', 'update');
+});
