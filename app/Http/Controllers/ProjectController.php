@@ -14,9 +14,19 @@ class ProjectController extends Controller
     // showing all projects.
     public function index(Request $request)
     {
-        $projects = Project::with(['task_progress']);
+        // getting the search parameter that passed with the route.
+        $query = $request->get('search');
 
-        return response(['data' => $projects->paginate(10)], 200);
+        $projects = Project::with('task_progress');
+
+        // getting only the projects having the same name of the search parameter (if the query exist).
+        if ($query) {
+            $projects->where('name', 'like', "%{$query}%");
+        }
+
+        $projects->orderBy('id', 'desc');
+
+        return response()->json(['data' => $projects->paginate(10)], 200);
     }
 
     // Create new project.
