@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\TaskStatusRequest;
 use App\Models\Task;
 use App\Models\TaskMember;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
+    // store a new task.
     public function store(TaskRequest $request)
     {
         $validated = $request->validated();
@@ -34,5 +36,29 @@ class TaskController extends Controller
 
             return response()->json(['message' => 'Task created successfully!']);
         });
+    }
+
+    // Updating the task status to PENDING.
+    public function updateTaskStatusToPending(TaskStatusRequest $request)
+    {
+        Task::changeTaskStatus($request->validated()['taskId'], Task::PENDING);
+
+        return response()->json(['message' => 'Task Moved to pending'], 200);
+    }
+
+    // Updating the task status to COMPLETED.
+    public function updateTaskStatusToCompleted(TaskStatusRequest $request)
+    {
+        Task::changeTaskStatus($request->validated()['taskId'], Task::COMPLETED);
+
+        return response()->json(['message' => 'Task Moved to completed'], 200);
+    }
+
+    // Updating the task status to NOT_STARTED.
+    public function updateTaskStatusToNotStarted(TaskStatusRequest $request)
+    {
+        Task::changeTaskStatus($request->validated()['taskId'], Task::NOT_STARTED);
+
+        return response()->json(['message' => 'Task Moved to not started'], 200);
     }
 }
