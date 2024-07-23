@@ -93,4 +93,10 @@ class ProjectController extends Controller
 
         return response()->json(['message' => 'Project has pinned on dashboard successfully!'], 200);
     }
+
+    // projects count function.
+    public function projectsCount()
+    {
+        return response()->json(['projects_count' => Project::count()]);
+    }
 }
