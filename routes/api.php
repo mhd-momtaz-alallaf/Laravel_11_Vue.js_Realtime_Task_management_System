@@ -56,4 +56,13 @@ Route::controller(MemberController::class)->group(function() {
 Route::controller(TaskController::class)->group(function() {
     // storing a new task.
     Route::post('/tasks', 'store');
+
+    // updating the task status to pending endpoint.
+    Route::put('/tasks/change-status-to-pending', 'updateTaskStatusToPending');
+
+    // updating the task status to completed endpoint.
+    Route::put('/tasks/change-status-to-completed', 'updateTaskStatusToCompleted');
+
+    // updating the task status to not started endpoint.
+    Route::put('/tasks/change-status-to-not-started', 'updateTaskStatusToNotStarted');
 });
