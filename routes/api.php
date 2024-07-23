@@ -29,6 +29,9 @@ Route::controller(ProjectController::class)->group(function(){
     // Getting all the projects route.
     Route::get('/projects', 'index');
 
+    // Show a project details route.
+    Route::get('/projects/{project:slug}', 'show');
+
     // Pinning a project on dashboard route.
     Route::post('/projects/{project}/pin-on-dashboard', 'pinProjectOnDashboard');
 });
