@@ -18,4 +18,10 @@ class Task extends Model
     const NOT_STARTED = 0;
     const PENDING = 1;
     const COMPLETED = 2;
+
+    // creating the relation with the TaskMember Model
+    public function members()
+    {
+        return $this->hasMany(TaskMember::class); // each Task => many TaskMember
+    }
 }
