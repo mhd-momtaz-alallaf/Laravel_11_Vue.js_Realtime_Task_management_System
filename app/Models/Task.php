@@ -25,4 +25,11 @@ class Task extends Model
     {
         return $this->hasMany(TaskMember::class); // each Task => Many TaskMember
     }
+
+    // a static function to change the task status
+    public static function changeTaskStatus($taskId, $status)
+    {
+        Task::where('id', $taskId)
+            ->update(['status' => $status]);
+    }
 }
