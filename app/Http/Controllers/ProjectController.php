@@ -29,6 +29,15 @@ class ProjectController extends Controller
         return response()->json(['data' => $projects->paginate(10)], 200);
     }
 
+    // show a project details.
+    public function show(Project $project)
+    {
+        // loading the tasks relation with task_members and each member of the task.
+        $project->load(['tasks.task_members.member']);
+
+        return response()->json(['data' => $project], 200);
+    }
+
     // Create new project.
     public function store(ProjectRequest $request)
     {
