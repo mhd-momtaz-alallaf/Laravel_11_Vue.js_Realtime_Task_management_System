@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'project_id',
+        'name',
+        'status',
+    ];
+
+    const NOT_STARTED = 0;
+    const PENDING = 1;
+    const COMPLETED = 2;
 }
