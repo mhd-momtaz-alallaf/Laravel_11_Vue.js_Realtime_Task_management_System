@@ -29,8 +29,8 @@ class TaskController extends Controller
                 'member_id' => $memberId,
             ], $validated['memberIds']);
 
-            // creating Many TaskMember ($taskMembers collection), using the members() relation in the Task Model.
-            $task->members()->createMany($taskMembers);
+            // creating Many TaskMember ($taskMembers collection), using the task_members() relation in the Task Model.
+            $task->task_members()->createMany($taskMembers);
 
             return response()->json(['message' => 'Task created successfully!']);
         });

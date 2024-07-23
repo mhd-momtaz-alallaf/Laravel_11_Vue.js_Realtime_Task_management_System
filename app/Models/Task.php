@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends Model
 {
@@ -20,8 +21,8 @@ class Task extends Model
     const COMPLETED = 2;
 
     // creating the relation with the TaskMember Model
-    public function members()
+    public function task_members():HasMany
     {
-        return $this->hasMany(TaskMember::class); // each Task => many TaskMember
+        return $this->hasMany(TaskMember::class); // each Task => Many TaskMember
     }
 }
