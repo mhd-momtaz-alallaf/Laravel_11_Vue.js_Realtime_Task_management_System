@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,9 @@ Route::controller(MemberController::class)->group(function(){
 
     // Updating a member.
     Route::put('/members/{member}', 'update');
+});
+
+Route::controller(TaskController::class)->group(function(){
+    // storing a new task.
+    Route::post('/tasks', 'store');
 });
