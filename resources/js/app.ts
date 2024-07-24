@@ -7,8 +7,14 @@ import ToastPlugin from 'vue-toast-notification';
 // Import one of the available themes
 //import 'vue-toast-notification/dist/theme-default.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
+import Error from './src/components/Error.vue';
+import BaseBtn from './src/components/BaseBtn.vue';
+import BaseInput from './src/components/BaseInput.vue';
 
 createApp(App)
 .use(router)
 .use(ToastPlugin)
+.component('Error', Error)
+.component('BaseBtn', BaseBtn)
+.component('BaseInput', BaseInput)
 .mount("#app")

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // redirecting to the base url
 Route::get('/', function () {
-    return redirect('/app/login');
+    return redirect('/app/register');
 });
 
 // the base url of the vue app
