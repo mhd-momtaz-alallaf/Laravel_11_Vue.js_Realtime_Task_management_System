@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { makeHttpRequest } from "../../../helpers/makeHttpRequest";
 import { showError, successMsg } from "../../../helpers/toast-notification";
+import { showErrorResponse } from "../../../helpers/util";
 
 export type RegisterUserType = {
     email: string;
@@ -33,14 +34,7 @@ export function useRegisterUser() {
             successMsg(data.message);
         } catch (error: any) {
             loading.value = false;
-            if (error.errors) {
-                for (const key in error.errors) {
-                    if(typeof error.errors[key] === "string")
-                        showError(error.errors[key]);
-                }
-            } else {
-                showError("An unexpected error occurred.");
-            }
+            showErrorResponse(error);
         }
     }
 

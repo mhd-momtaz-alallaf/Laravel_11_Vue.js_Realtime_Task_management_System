@@ -1,6 +1,8 @@
 import { ref } from "vue";
 import { makeHttpRequest } from "../../../helpers/makeHttpRequest";
 import { showError, successMsg } from "../../../helpers/toast-notification";
+import { showErrorResponse } from "../../../helpers/util";
+
 
 export type LoginUserType = {
     email: string
@@ -8,9 +10,10 @@ export type LoginUserType = {
 }
 
 export type LoginResponseType = {
-    user: {email: string};
+    user:{ email: string, id: number};
     message: string;
-    isLoggedIn?: boolean;
+    isLoggedIn: boolean;
+    token: string;
 }
 
 export const loginInput = ref<LoginUserType>({
@@ -32,22 +35,15 @@ export function useLoginUser() {
             loading.value = false;
             loginInput.value = {} as LoginUserType;
 
-            if (data.isLoggedIn) {
-                successMsg(data.message);
-            } else {
-                showError(data.message);
+            successMsg(data.message)
+            if(data.isLoggedIn){
+                // storing the user data (response) in the local storage.
+                localStorage.setItem('userData', JSON.stringify(data))
+                window.location.href="/app/dashboard"
             }
         } catch (error: any) {
             loading.value = false;
-
-            if (error.errors) {
-                for (const key in error.errors) {
-                    if(typeof error.errors[key] === "string")
-                        showError(error.errors[key]);
-                }
-            } else {
-                showError("An unexpected error occurred.");
-            }
+            showErrorResponse(error);
         }
     }
     return {login, loading}
