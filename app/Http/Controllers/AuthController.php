@@ -45,19 +45,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $user_fields = $request->all();
-
-        $errors = Validator::make($user_fields, [
+        $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if($errors->fails()){
-            return response($errors->errors()->all(), 422);
-        }
-
         // searching for the user email in the database.
-        $user = User::where('email', $user_fields['email'])->first();
+        $user = User::where('email', $validated['email'])->first();
 
         if($user){
             if($user->isValidEmail !== User::IS_VALID_EMAIL){
@@ -70,7 +64,7 @@ class AuthController extends Controller
             }
         }
 
-        if(!$user || !Hash::check($user_fields['password'], $user->password)){
+        if(!$user || !Hash::check($validated['password'], $user->password)){
             return response([
                 'message' => 'email or password are invalid!',
                 'isLoggedIn' => false,
@@ -91,7 +85,7 @@ class AuthController extends Controller
         User::where('remember_token', $token)
             ->update(['isValidEmail' => User::IS_VALID_EMAIL]);
 
-        return redirect('/login');
+        return redirect('/app/login');
     }
 
     // generating a random string for use it as the user remember token.

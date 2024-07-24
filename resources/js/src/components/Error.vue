@@ -2,18 +2,18 @@
 import { ErrorObject } from "@vuelidate/core";
 
 const props = defineProps<{
-    label:string
+    label: string;
     errors: ErrorObject[];
 }>();
 </script>
 
 <template>
-    <label for="">{{props.label}}</label>
+    <label for="">{{ props.label }}</label>
     <div :class="{ error: props.errors.length }">
         <slot></slot>
         <div
             class="input-errors"
-            v-for="error of props.errors"
+            v-for="error in props.errors"
             :key="error.$uid"
         >
             <div class="error-msg">{{ error.$message }}</div>
@@ -22,7 +22,7 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-.input-errors{
-    color:red;
+.input-errors {
+    color: red;
 }
 </style>
