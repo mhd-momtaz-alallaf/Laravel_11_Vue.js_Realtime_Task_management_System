@@ -39,7 +39,7 @@ export function useLoginUser() {
             if(data.isLoggedIn){
                 // storing the user data (response) in the local storage.
                 localStorage.setItem('userData', JSON.stringify(data))
-                window.location.href="/app/dashboard"
+                window.location.href="/app/admin"
             }
         } catch (error: any) {
             loading.value = false;
