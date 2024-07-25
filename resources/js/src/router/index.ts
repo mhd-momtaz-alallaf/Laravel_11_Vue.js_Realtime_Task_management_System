@@ -21,6 +21,23 @@ const router = createRouter({
               },
             ],
         },
+        {
+            path: "/admin",
+            name: "admin",
+            component: () => import("../pages/admin/AdminPage.vue"),
+            children: [
+                {
+                    path: "/admin",
+                    name: "admin",
+                    component: () => import("../pages/admin/dashboard/DashboardPage.vue"),
+                },
+                {
+                    path: "/members",
+                    name: "members",
+                    component: () => import("../pages/admin/member/MemberPage.vue"),
+                },
+            ],
+        },
     ],
 });
 
