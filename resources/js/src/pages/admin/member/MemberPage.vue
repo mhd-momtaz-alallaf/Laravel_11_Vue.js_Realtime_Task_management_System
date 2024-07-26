@@ -7,12 +7,21 @@
                         Members
                         <router-link style="float:right" to="/create-members" class="btn btn-primary">Create Member</router-link>
                     </div>
-
                     <div class="card-body">
                         <MemberTable
-                        :members="memberData"
-                        :loading="loading"
-                        @getMember="getMembers"/>
+                            :loading="loading"
+                            @getMember="getMembers"
+                            :members="memberData"
+                        >
+                            <!-- Passing the pagination data as a slot -->
+                            <template #pagination>
+                                <Bootstrap5Pagination
+                                    v-if="memberData?.data"
+                                    :data="memberData?.data"
+                                    @pagination-change-page="getMembers"
+                                />
+                            </template>
+                        </MemberTable>
                     </div>
                 </div>
             </div>
@@ -22,15 +31,13 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { MemberType, useGetMembers } from "./actions/getMember";
+import { useGetMembers } from "./actions/getMember";
 import MemberTable from './components/MemberTable.vue';
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 const { getMembers, loading, memberData } = useGetMembers();
-async function showListOfMembers() {
-    await getMembers();
-}
 
 onMounted(async () => {
-    showListOfMembers();
+    await getMembers();
 });
 </script>
