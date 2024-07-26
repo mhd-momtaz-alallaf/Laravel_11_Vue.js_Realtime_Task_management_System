@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { GetMemberType, MemberType } from '../actions/getMember';
+import { getMemberType, memberType } from '../actions/getMember';
 import { myDebounce } from '../../../../helpers/util';
 
 defineProps<{
-    members: GetMemberType;
+    members: getMemberType;
     loading: boolean;
 }>();
 
 const emit = defineEmits<{
-    (e: "editMember", member: MemberType): void;
-    (e: "getMember", query: String): Promise<void>;
+    (e: "editMember", member: memberType): void;
+    (e: "getMember", page: number, query: string): Promise<void>;
 }>();
 
 const query = ref('');
 const search = myDebounce(async function () {
-    await emit("getMember", query.value);
+    await emit("getMember", 1, query.value);
 }, 200);
 </script>
 
@@ -30,12 +30,7 @@ const search = myDebounce(async function () {
                     placeholder="search..."
                     class="form-control"
                 />
-                <span
-                    style="color: blue"
-                    v-show="loading === true ? true : false"
-                    >
-                    Searching....
-                </span>
+                <span v-if="loading" style="color: blue">Searching....</span>
             </div>
         </div>
 
@@ -70,5 +65,8 @@ const search = myDebounce(async function () {
                 </tbody>
             </table>
         </div>
+
+        <!-- creating a slot for passing the pagination from the MemberPage.vue file -->
+        <slot name="pagination"></slot>
     </div>
 </template>
