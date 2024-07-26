@@ -10,6 +10,7 @@ import 'vue-toast-notification/dist/theme-bootstrap.css';
 import Error from './src/components/Error.vue';
 import BaseBtn from './src/components/BaseBtn.vue';
 import BaseInput from './src/components/BaseInput.vue';
+import { Bootstrap5Pagination } from "laravel-vue-pagination";
 
 createApp(App)
 .use(router)
@@ -17,4 +18,5 @@ createApp(App)
 .component('Error', Error)
 .component('BaseBtn', BaseBtn)
 .component('BaseInput', BaseInput)
+.component('Bootstrap5Pagination', Bootstrap5Pagination)
 .mount("#app")
