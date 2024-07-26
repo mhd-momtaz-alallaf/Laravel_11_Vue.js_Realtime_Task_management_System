@@ -18,3 +18,13 @@ export function showErrorResponse(error: any) {
         showError((error as Error).message);
     }
 }
+
+// this function is for make a time delay for getting the results of the search query, this will reduce the requests on the server and improve the request.
+export function myDebounce<T>(func: (args?: any)=>Promise<T>, delay: number) {
+    let timer: any;
+
+    return function(){
+        clearTimeout(timer);
+        timer = setTimeout(() => func(), delay);
+    }
+}
