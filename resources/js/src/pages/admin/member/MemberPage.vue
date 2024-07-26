@@ -9,7 +9,10 @@
                     </div>
 
                     <div class="card-body">
-                        <MemberTable :members="memberData"/>
+                        <MemberTable
+                        :members="memberData"
+                        :loading="loading"
+                        @getMember="getMembers"/>
                     </div>
                 </div>
             </div>
