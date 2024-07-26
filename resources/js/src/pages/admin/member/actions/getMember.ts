@@ -15,11 +15,11 @@ export type GetMemberType = {
 export function useGetMembers() {
     const loading = ref(false);
     const memberData = ref<GetMemberType>({} as GetMemberType);
-    async function getMembers(){
+    async function getMembers(query: String=''){
        try {
             loading.value = true;
             const data= await makeHttpRequest<undefined,GetMemberType>(
-                'members',
+                `members?search=${query}`,
                 'GET',
             );
 
