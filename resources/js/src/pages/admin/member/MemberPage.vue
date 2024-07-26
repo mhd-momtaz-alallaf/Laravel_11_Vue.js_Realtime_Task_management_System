@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import MemberTable from './components/MemberTable.vue';
-</script>
-
 <template>
     <div class="container">
         <div class="row">
@@ -13,10 +9,25 @@ import MemberTable from './components/MemberTable.vue';
                     </div>
 
                     <div class="card-body">
-                        <MemberTable />
+                        <MemberTable :members="memberData"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { MemberType, useGetMembers } from "./actions/getMember";
+import MemberTable from './components/MemberTable.vue';
+
+const { getMembers, loading, memberData } = useGetMembers();
+async function showListOfMembers() {
+    await getMembers();
+}
+
+onMounted(async () => {
+    showListOfMembers();
+});
+</script>
