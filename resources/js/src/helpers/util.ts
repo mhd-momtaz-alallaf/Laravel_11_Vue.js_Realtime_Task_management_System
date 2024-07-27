@@ -1,21 +1,20 @@
 import { showError } from "./toast-notification";
 
 export function showErrorResponse(error: any) {
-    // if the error is an object
-    if (error.errors) {
-        for (const key in error.errors) {
-            if(typeof error.errors[key] === "string")
-                showError(error.errors[key]);
+    console.log("Error received:", error); // Debugging line
+
+    if (error.errors && typeof error.errors === 'object') {
+        for (const field in error.errors) {
+            if (Array.isArray(error.errors[field])) {
+                for (const msg of error.errors[field]) {
+                    showError(msg);
+                }
+            }
         }
-    }
-    // if the error is an array
-    else if(Array.isArray(error)) {
-        for (const message in error as string[]) {
-            showError(message);
-        }
-    }
-     else {
-        showError((error as Error).message);
+    } else if (error.message) {
+        showError(error.message);
+    } else {
+        showError("An unexpected error occurred.");
     }
 }
 
