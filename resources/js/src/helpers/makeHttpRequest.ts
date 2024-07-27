@@ -1,4 +1,4 @@
-import { APP } from "./../app/APP";
+import { APP } from "../app/APP";
 import { getUserCredentials } from "./getUserCredentials";
 
 type HttpVerbType = "GET" | "POST" | "PUT" | "DELETE";
@@ -11,27 +11,39 @@ export function makeHttpRequest<TInput, TResponse>(
     return new Promise<TResponse>(async (resolve, reject) => {
         try {
             const userData = getUserCredentials();
-            const response = await fetch(`${APP.apiBaseURL}/${endpoint}`, {
+            const res = await fetch(`${APP.apiBaseURL}/${endpoint}`, {
                 method: verb,
                 headers: {
-                    "content-type": "application/json",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
                     Authorization: "Bearer " + userData?.token,
                 },
-                body: JSON.stringify(input),
+                body: input ? JSON.stringify(input) : undefined,
             });
 
-            const data = await response.json();
+            // Check if the response is JSON
+            const contentType = res.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await res.json();
 
-            if (!response.ok) {
-                reject({
-                    errors: data,
-                });
+                if (!res.ok) {
+                    reject(data);
+                } else {
+                    resolve(data);
+                }
             } else {
-                resolve(data);
+                // Handle unexpected response type
+                const errorText = await res.text();
+                reject({
+                    status: res.status,
+                    message: `Unexpected response type: ${contentType}. Response body: ${errorText}`
+                });
             }
 
-        } catch (error) {
-            reject(error);
+        } catch (error: any) {
+            reject({
+                message: error.message || "Network error",
+            });
         }
     });
 }
