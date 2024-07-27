@@ -20,6 +20,11 @@ Route::controller(AuthController::class)->group(function() {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
+    Route::controller(AuthController::class)->group(function() {
+        // Logout a user endpoint.
+        Route::post('/logout', 'logoutUser');
+    });
+
     Route::controller(ProjectController::class)->group(function() {
         // Storing Project post route.
         Route::post('/projects', 'store');
