@@ -11,10 +11,12 @@ import Error from './src/components/Error.vue';
 import BaseBtn from './src/components/BaseBtn.vue';
 import BaseInput from './src/components/BaseInput.vue';
 import { Bootstrap5Pagination } from "laravel-vue-pagination";
+import { createPinia } from 'pinia';
 
 createApp(App)
 .use(router)
 .use(ToastPlugin)
+.use(createPinia())
 .component('Error', Error)
 .component('BaseBtn', BaseBtn)
 .component('BaseInput', BaseInput)
