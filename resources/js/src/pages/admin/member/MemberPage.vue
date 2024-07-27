@@ -9,6 +9,7 @@
                     </div>
                     <div class="card-body">
                         <MemberTable
+                            @edit-member="editMember"
                             :loading="loading"
                             @getMember="getMembers"
                             :members="memberData"
@@ -31,13 +32,32 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useGetMembers } from "./actions/getMember";
+import { memberType, useGetMembers } from "./actions/getMember";
 import MemberTable from './components/MemberTable.vue';
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+import { useRouter } from "vue-router";
+import { memberStore } from "./store/memberStore";
+import { MemberInputType } from "./actions/createMember";
 
 const { getMembers, loading, memberData } = useGetMembers();
 
+const router = useRouter();
+function editMember(member: memberType) {
+    memberStore.memberInput = {
+        id: member.id,
+        name: member.name,
+        email: member.email,
+    };
+    memberStore.edit = true;
+    router.push('/create-members');
+}
+
 onMounted(async () => {
     await getMembers();
+    memberStore.edit = false;
+    memberStore.memberInput = {
+        name: '',
+        email: '',
+    } as MemberInputType
 });
 </script>
