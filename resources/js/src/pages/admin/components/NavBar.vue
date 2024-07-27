@@ -4,27 +4,30 @@ import { RouterLink } from "vue-router";
 import { APP } from "../../../app/APP";
 
 const navigation = ref([
-
-  {
-    name: "Dashboard",
-    link: "/admin",
-    icon: "bi bi-wrench-adjustable",
-  },
-  {
-    name: "Projects",
-    link: "/projects",
-    icon: "bi bi-file-ppt",
-  },
-  {
-    name: "Members",
-    link: "/members",
-    icon: "bi bi-file-ppt",
-  },
+    {
+        name: "Dashboard",
+        link: "/admin",
+        icon: "bi bi-wrench-adjustable",
+    },
+    {
+        name: "Projects",
+        link: "/projects",
+        icon: "bi bi-file-ppt",
+    },
+    {
+        name: "Members",
+        link: "/members",
+        icon: "bi bi-file-ppt",
+    },
 ]);
 
-const emit=defineEmits<{
-  (e: 'logout'): Promise<void>,
-}>()
+const emit = defineEmits<{
+    (e: 'logout'): Promise<void>,
+}>();
+
+defineProps<{
+    loggedInUserEmail: string | undefined;
+}>();
 </script>
 
 <template>
@@ -37,6 +40,7 @@ const emit=defineEmits<{
             <div align="center">
                 <img :src="`${APP.baseURL}/others/logo.png`" style="height: 55px" alt="">
                 <h4>TaskMgr</h4>
+                {{ loggedInUserEmail }}
             </div>
             <br/>
 
