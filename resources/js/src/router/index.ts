@@ -1,49 +1,68 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+const routes = [
+    {
+        path: "/register",
+        name: "register",
+        component: () => import("../pages/auth/AuthPage.vue"),
+        children: [
+            {
+                path: "/register",
+                name: "register",
+                component: () => import("../pages/auth/RegisterPage.vue"),
+            },
+            {
+                path: "/login",
+                name: "login",
+                component: () => import("../pages/auth/LoginPage.vue"),
+            },
+        ],
+    },
+    {
+        path: "/admin",
+        name: "admin",
+        component: () => import("../pages/admin/AdminPage.vue"),
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: "/admin",
+                name: "admin",
+                component: () => import("../pages/admin/dashboard/DashboardPage.vue"),
+            },
+            {
+                path: "/members",
+                name: "members",
+                component: () => import("../pages/admin/member/MemberPage.vue"),
+            },
+            {
+                path: "/create-members",
+                name: "create-members",
+                component: () => import("../pages/admin/member/CreateMember.vue"),
+            },
+        ],
+    },
+];
+
 const router = createRouter({
-    // http://task-management-system.local/app
     history: createWebHistory("/app"),
-    routes: [
-        {
-            path: "/register",
-            name: "register",
-            component: () => import("../pages/auth/AuthPage.vue"),
-            children: [
-                {
-                    path: "/register",
-                    name: "register",
-                    component: () => import("../pages/auth/RegisterPage.vue"),
-                },
-                {
-                  path: "/login",
-                  name: "login",
-                  component: () => import("../pages/auth/LoginPage.vue"),
-              },
-            ],
-        },
-        {
-            path: "/admin",
-            name: "admin",
-            component: () => import("../pages/admin/AdminPage.vue"),
-            children: [
-                {
-                    path: "/admin",
-                    name: "admin",
-                    component: () => import("../pages/admin/dashboard/DashboardPage.vue"),
-                },
-                {
-                    path: "/members",
-                    name: "members",
-                    component: () => import("../pages/admin/member/MemberPage.vue"),
-                },
-                {
-                    path: "/create-members",
-                    name: "create-members",
-                    component: () => import("../pages/admin/member/CreateMember.vue"),
-                },
-            ],
-        },
-    ],
+    routes,
+});
+
+// Function to check if the user is authenticated
+function isAuthenticated() {
+    const userData = localStorage.getItem("userData");
+    return !!userData;
+}
+
+// Add navigation guard
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated()) {
+        // If the route requires authentication and the user is not authenticated, redirect to the login page
+        next({ name: "login" });
+    } else {
+        // Otherwise, proceed to the route
+        next();
+    }
 });
 
 export default router;
