@@ -8,13 +8,13 @@
                 <form @submit.prevent="submitMember">
                     <div class="form-group">
                         <Error label="Name" :errors="v$.name.$errors">
-                            <BaseInput v-model="memberInput.name" />
+                            <BaseInput v-model="memberStore.memberInput.name" />
                         </Error>
                     </div>
 
                     <div class="form-group">
                         <Error label="E-mail" :errors="v$.email.$errors">
-                            <BaseInput v-model="memberInput.email" />
+                            <BaseInput v-model="memberStore.memberInput.email" />
                         </Error>
                     </div>
 
@@ -23,7 +23,9 @@
                     <br/>
 
                     <div class="form-group">
-                        <BaseBtn class="btn btn-primary" label="Create Member" :loading="loading" />
+                        <BaseBtn :class="memberStore.edit ? 'btn btn-warning' : 'btn btn-primary'"
+                            :label="memberStore.edit ? 'Update Member' : 'Create Member'"
+                            :loading="loading" />
                     </div>
                 </form>
             </div>
@@ -34,14 +36,15 @@
 <script lang="ts" setup>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
-import { memberInput, useCreateOrUpdateMember } from ".//actions/createMember";
+import { useCreateOrUpdateMember } from ".//actions/createMember";
+import { memberStore } from ".//store/memberStore";
 
 const rules = {
     email: { required, email },
     name: { required },
 };
 
-const v$ = useVuelidate(rules, memberInput);
+const v$ = useVuelidate(rules, memberStore.memberInput);
 const { loading, createOrUpdate } = useCreateOrUpdateMember();
 
 async function submitMember() {
