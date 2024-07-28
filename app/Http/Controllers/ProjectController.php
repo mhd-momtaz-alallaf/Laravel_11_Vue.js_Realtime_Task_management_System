@@ -87,11 +87,41 @@ class ProjectController extends Controller
     // pinning a project on the dashboard.
     public function pinProjectOnDashboard(Project $project)
     {
-        TaskProgress::where('project_id', $project->id)->update([
-            'pinned_on_dashboard' => TaskProgress::PINNED_ON_DASHBOARD,
-        ]);
+        return DB::transaction(function () use ($project) {
+            // Unpin all projects from dashboard.
+            TaskProgress::where('pinned_on_dashboard', TaskProgress::PINNED_ON_DASHBOARD)->update([
+                    'pinned_on_dashboard' => TaskProgress::NOT_PINNED_ON_DASHBOARD,
+                ]);
 
-        return response()->json(['message' => 'Project has pinned on dashboard successfully!'], 200);
+            // pin only one project on dashboard.
+            TaskProgress::where('project_id', $project->id)->update([
+                'pinned_on_dashboard' => TaskProgress::PINNED_ON_DASHBOARD,
+            ]);
+
+            return response()->json([
+                'message' => 'Project has pinned on dashboard successfully!'
+            ], 200);
+        });
+    }
+
+    // get the pinned project on dashboard.
+    public function getPinnedProject()
+    {   // this will get only the id and name of the project that have the 'pinned_on_dashboard' value of the relation 'task_progress' is 1.
+        $project = Project::whereHas('task_progress', function ($query) {
+            $query->where('pinned_on_dashboard', true);
+        })
+        ->select('id', 'name')
+        ->first();
+
+        return response()->json(['data' => $project]);
+
+        // $project = DB::table('task_progress')
+        //     ->join('projects', 'task_progress.projectId', '=', 'projects.id')
+        //     ->select('projects.id', 'projects.name')
+        //     ->where('task_progress.pinned_on_dashbaord', TaskProgress::PINNED_ON_DASHBOARD)
+        //     ->first();
+
+        // return response(['data' => $project]);
     }
 
     // projects count function.
