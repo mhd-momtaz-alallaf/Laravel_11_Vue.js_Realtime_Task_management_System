@@ -32,6 +32,9 @@ Route::middleware('auth:sanctum')->group(function() {
         // projects count endpoint.
         Route::get('/projects/count', 'projectsCount');
 
+        // get the Pinned project on dashboard endpoint.
+        Route::get('/projects/get-pinned-project', 'getPinnedProject');
+
         // Updating Project put route.
         Route::put('/projects/{project}', 'update')
             ->where('project', '[0-9]+');
