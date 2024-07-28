@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewProjectCreated;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
@@ -60,6 +61,10 @@ class ProjectController extends Controller
                 'pinned_on_dashboard' => TaskProgress::NOT_PINNED_ON_DASHBOARD,
                 'progress' => TaskProgress::INITIAL_PROJECT_PROGRESS_PERCENT,
             ]);
+
+            // dispatching the NewProjectCreated Event, this will automatically update the projects count with each new project.
+            $count = Project::count();
+            NewProjectCreated::dispatch($count);
 
             return response([
                 'message' => 'Project created successfully!',
