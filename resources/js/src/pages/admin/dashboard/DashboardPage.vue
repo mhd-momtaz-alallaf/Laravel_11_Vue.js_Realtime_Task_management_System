@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import ApexDonut from './/components/ApexDonut.vue';
 import ApexRadialBar from './/components/ApexRadialBar.vue';
+import { useGetPinnedProject } from './actions/getPinnedProject';
+import { useGetTotalProjects } from './actions/getProjectsCount';
+
+const { project, getPinnedProject } = useGetPinnedProject();
+const { projects, getTotalProjects } = useGetTotalProjects();
+
+onMounted(async () => {
+    await getPinnedProject();
+    getTotalProjects();
+});
 </script>
 
 <template>
@@ -11,8 +22,9 @@ import ApexRadialBar from './/components/ApexRadialBar.vue';
         <br />
         <div class="row">
             <div class="col-md-8">
+                <!-- {{ project?.id }} -->
                 <h3 style="color: rgb(118, 119, 120)">
-                    Project:
+                    Project :{{ project?.name }}
                 </h3>
             </div>
         </div>
@@ -26,7 +38,7 @@ import ApexRadialBar from './/components/ApexRadialBar.vue';
                     <div class="card-body">
                         <br />
                         <br />
-                        <h2 align="center">11</h2>
+                        <h2 align="center">{{ projects?.projects_count }}</h2>
                         <br />
                         <br />
                     </div>
