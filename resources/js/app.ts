@@ -12,11 +12,13 @@ import BaseBtn from './src/components/BaseBtn.vue';
 import BaseInput from './src/components/BaseInput.vue';
 import { Bootstrap5Pagination } from "laravel-vue-pagination";
 import { createPinia } from 'pinia';
+import VueApexCharts from "vue3-apexcharts";
 
 createApp(App)
 .use(router)
 .use(ToastPlugin)
 .use(createPinia())
+.use(VueApexCharts)
 .component('Error', Error)
 .component('BaseBtn', BaseBtn)
 .component('BaseInput', BaseInput)
