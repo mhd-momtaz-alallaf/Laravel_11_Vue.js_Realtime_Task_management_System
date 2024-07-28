@@ -5,8 +5,10 @@ import ProjectTable from "./components/ProjectTable.vue";
 import { useRouter } from "vue-router";
 import { projectStore } from ".//store/projectStore";
 import { ProjectInputType } from ".//actions/createProject";
+import { usePinProjectOnDashboard } from "./actions/pinOnDashboard";
 
 const { getProjects, loading, ProjectData } = useGetProject();
+const { pinnedProject } = usePinProjectOnDashboard();
 const router = useRouter();
 
 function editProject(project: ProjectType){
@@ -17,9 +19,14 @@ function editProject(project: ProjectType){
         endDate: project.endDate,
     };
 
-    projectStore.edit=true
-    router.push('/create-projects')
+    projectStore.edit = true;
+    router.push('/create-projects');
 };
+
+async function pinProjectOnDashboard(projectId: number) {
+    await pinnedProject(projectId);
+    router.push('/admin');
+}
 
 onMounted(async () => {
     await getProjects();
@@ -48,6 +55,7 @@ onMounted(async () => {
                         <ProjectTable
                             @getProject="getProjects"
                             @editProject="editProject"
+                            @pinnedProject="pinProjectOnDashboard"
                             :loading="loading"
                             :projects="ProjectData"
                         >
