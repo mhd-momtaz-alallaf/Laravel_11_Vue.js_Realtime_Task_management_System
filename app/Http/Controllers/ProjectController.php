@@ -26,7 +26,7 @@ class ProjectController extends Controller
 
         $projects->orderBy('id', 'desc');
 
-        return response()->json(['data' => $projects->paginate(10)], 200);
+        return response()->json(['data' => $projects->paginate(7)], 200);
     }
 
     // show a project details.

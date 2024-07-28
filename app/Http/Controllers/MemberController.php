@@ -24,7 +24,7 @@ class MemberController extends Controller
 
         $members->orderBy('id', 'desc');
 
-        return response()->json(['data' => $members->paginate(6)], 200);
+        return response()->json(['data' => $members->paginate(7)], 200);
     }
 
     public function store(MemberRequest $request)

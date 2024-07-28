@@ -39,6 +39,11 @@ const routes = [
                 name: "create-members",
                 component: () => import("../pages/admin/member/CreateMember.vue"),
             },
+            {
+                path: "/projects",
+                name: "projects",
+                component: () => import("../pages/admin/project/ProjectPage.vue"),
+            },
         ],
     },
 ];
