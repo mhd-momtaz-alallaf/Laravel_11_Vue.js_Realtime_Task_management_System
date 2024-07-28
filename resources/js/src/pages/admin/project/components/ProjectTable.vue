@@ -9,7 +9,7 @@ defineProps<{
     loading: boolean;
 }>();
 
-const emit=defineEmits< {
+const emit = defineEmits< {
     (e:'pinnedProject', projectId: number): void;
     (e:'editProject', project: ProjectType): void;
     (e:'viewProjectDetail', projectId: number): void;
