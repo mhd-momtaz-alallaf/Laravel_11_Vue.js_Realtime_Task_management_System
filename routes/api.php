@@ -29,6 +29,10 @@ Route::middleware('auth:sanctum')->group(function() {
         // Storing Project post route.
         Route::post('/projects', 'store');
 
+        // get a project charts data endpoint.
+        Route::get('/projects/{project}/get-charts-data', 'getProjectChartData')
+            ->where('project', '[0-9]+');
+
         // projects count endpoint.
         Route::get('/projects/count', 'projectsCount');
 
