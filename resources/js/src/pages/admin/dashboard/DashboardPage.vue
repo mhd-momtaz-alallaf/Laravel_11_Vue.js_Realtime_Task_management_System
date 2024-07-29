@@ -4,12 +4,16 @@ import ApexDonut from './/components/ApexDonut.vue';
 import ApexRadialBar from './/components/ApexRadialBar.vue';
 import { useGetPinnedProject } from './actions/getPinnedProject';
 import { useGetTotalProjects } from './actions/getProjectsCount';
+import { useGetChartData } from './actions/getChartsData';
 
 const { project, getPinnedProject } = useGetPinnedProject();
 const { projects, getTotalProjects } = useGetTotalProjects();
+const { chartData, getChartData } = useGetChartData();
+
 
 onMounted(async () => {
     await getPinnedProject();
+    getChartData(project.value.id);
     getTotalProjects();
 });
 </script>
@@ -46,10 +50,17 @@ onMounted(async () => {
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="card">
-                    <div class="card-header"><b>Tasks</b></div>
+                    <div class="card-header">
+                        <b>Tasks</b>
+                    </div>
+
                     <div class="card-body">
-                        <div>
-                            <ApexDonut :task="[40,60]" />
+                        {{ chartData.tasks }}
+                        <div v-if="chartData.tasks">
+                            <ApexDonut :task="chartData.tasks" />
+                        </div>
+                        <div v-else>
+                            <ApexDonut :task="[0, 0, 0]" />
                         </div>
                     </div>
                 </div>
@@ -61,8 +72,11 @@ onMounted(async () => {
                     </div>
 
                     <div class="card-body">
-                        <div>
-                            <ApexRadialBar :percent="70"/>
+                        <div v-if="chartData.progress > 0">
+                            <ApexRadialBar :percent="chartData.progress" />
+                        </div>
+                        <div v-else>
+                            <ApexRadialBar :percent=0 />
                         </div>
                         <br />
                     </div>
