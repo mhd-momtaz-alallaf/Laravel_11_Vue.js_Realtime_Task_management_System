@@ -6,6 +6,7 @@ use App\Events\NewProjectCreated;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\TaskProgress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -133,5 +134,25 @@ class ProjectController extends Controller
     public function projectsCount()
     {
         return response()->json(['projects_count' => Project::count()]);
+    }
+
+    // getting the Count of the not_started, pending and completing tasks of an project to pass it to the charts.
+    public function getProjectChartData(Project $project)
+    {
+        $taskProgress = TaskProgress::where('project_id', $project->id)
+            ->value('progress');
+
+        $taskCounts = Task::where('project_id', $project->id)
+            ->selectRaw('SUM(status = ?) as not_started, SUM(status = ?) as pending, SUM(status = ?) as completed', [Task::NOT_STARTED, Task::PENDING, Task::COMPLETED])
+            ->first();
+
+        $not_started = (int) $taskCounts->not_started ?? 0;
+        $pending = (int) $taskCounts->pending ?? 0;
+        $completed = (int) $taskCounts->completed ?? 0;
+
+        return response([
+            'tasks' => [$not_started, $pending, $completed],
+            'progress' => (int) $taskProgress
+        ]);
     }
 }
