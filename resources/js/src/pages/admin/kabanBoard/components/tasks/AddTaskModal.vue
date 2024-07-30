@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import { ref } from "vue";
-import { getMemberType } from "../../../member/actions/getMember";
+import { onMounted, ref } from "vue";
+import { getMemberType, useGetMembers } from "../../../member/actions/getMember";
 import { showError } from "../../../../../helpers/toast-notification";
 import { myDebounce } from "../../../../../helpers/util";
+import { taskStore } from "../../store/kabanStore";
+import { useSelectMember } from "../../actions/selectMember";
+import { useCreateTask } from "../../actions/createTask";
+
+const { getMembers, memberData } = useGetMembers();
+const { selectMember, unSelectMember, clearAllSelectedMembers, selectedMembers } = useSelectMember();
 
 const emit = defineEmits<{
     (e: "closeModal"): void;
@@ -13,7 +19,36 @@ const emit = defineEmits<{
 const rules = {
     name: { required }, // Matches state.lastName
 };
+
+const v$ = useVuelidate(rules, taskStore.taskInput);
+const query = ref("");
+const { loading, createTask } = useCreateTask();
+
+async function submitTask() {
+    const result = await v$.value.$validate();
+
+    if (!result) return;
+
+    if (taskStore.taskInput.memberIds.length > 0) {
+        await createTask();
+        taskStore.taskInput.memberIds = [];
+        taskStore.taskInput.name = "";
+        clearAllSelectedMembers();
+        v$.value.$reset();
+    } else{
+        showError('Please select a member first!');
+    }
+};
+
+const searchMember = myDebounce(async function() {
+    getMembers(1, query.value);
+}, 300);
+
+onMounted(async () => {
+    await getMembers();
+});
 </script>
+
 <template>
     <!-- Modal -->
     <div
@@ -25,10 +60,8 @@ const rules = {
     >
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- @submit.prevent="submitTask" -->
-                <form
-                    enctype="multipart/form-data"
-                >
+                <!-- -->
+                <form @submit.prevent="submitTask" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
                             Add Task
@@ -56,12 +89,12 @@ const rules = {
                             <div class="row">
                                 <!-- {{ taskStore.taskInput }} -->
                                 <div class="col-md-9">
-                                    <!-- <Error :errors="v$.name.$errors">
+                                    <Error :errors="v$.name.$errors">
                                         <BaseInput
                                             placeholder="Task name"
                                             v-model="taskStore.taskInput.name"
                                         />
-                                    </Error> -->
+                                    </Error>
                                 </div>
 
                                 <div class="col-md-3">
@@ -76,7 +109,6 @@ const rules = {
                             <br />
 
                             <div class="form-group">
-                                <!-- @keyup="searchMember" -->
                                 <BaseInput
                                     type="text"
                                     v-model="query"
@@ -98,7 +130,7 @@ const rules = {
                                 </tr>
                             </thead>
                             <tr
-                                v-for="member in members?.data?.data"
+                                v-for="member in memberData?.data?.data"
                                 :key="member.id"
                             >
                                 <td># {{ member.id }}</td>
@@ -118,12 +150,19 @@ const rules = {
                                 </td>
                             </tr>
                         </table>
+                        <!-- Adding Pagination to the member table -->
+                        <Bootstrap5Pagination
+                            v-if="memberData?.data"
+                            :data="memberData?.data"
+                            @pagination-change-page="getMembers"
+                        />
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </template>
+
 <style scoped>
 .select-members span {
     padding: 5px;
