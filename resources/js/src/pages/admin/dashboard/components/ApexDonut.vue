@@ -21,7 +21,7 @@ export default defineComponent({
                     id: 'apex-donut',
                 },
                 // labels: this.$props.labels,
-                labels: ['Not Started','Pending','Completed'],
+                labels: ['New','Pending','Completed'],
                 colors: [],
                 markers: {
                     size: 5,

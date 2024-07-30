@@ -49,6 +49,11 @@ const routes = [
                 name: "create-projects",
                 component: () => import("../pages/admin/project/CreateProject.vue"),
             },
+            {
+                path: "/kaban",
+                name: "kaban",
+                component: () => import("../pages/admin/kabanBoard/KabanBoard.vue"),
+            },
         ],
     },
 ];

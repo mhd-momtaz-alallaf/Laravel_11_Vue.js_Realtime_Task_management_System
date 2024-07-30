@@ -13,7 +13,7 @@ const emit = defineEmits< {
     (e:'pinnedProject', projectId: number): void;
     (e:'editProject', project: ProjectType): void;
     (e:'viewProjectDetail', projectId: number): void;
-    (e:'getProject', page:number, query:string): Promise<void>;
+    (e:'getProject', page:number, query: string): Promise<void>;
 }>();
 
 const query = ref("");
@@ -75,7 +75,7 @@ const search = myDebounce(async function () {
                     <td>
                         <RouterLink
                             class="btn btn-warning"
-                            :to="'/kaban?query=' + project.slug"
+                            :to="'/kaban?project=' + project.slug"
                         >
                             View <i class="bi bi-arrow-right"></i>
                         </RouterLink>
