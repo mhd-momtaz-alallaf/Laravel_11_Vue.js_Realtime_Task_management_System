@@ -1,5 +1,6 @@
 <template>
     <div class="row">
+        <AddTaskModal @closeModal="closeTaskModal" />
         <BreadCrumb />
         <ProjectDetail :ProjectDetail="ProjectData" />
         <ProjectProgress :ProjectDetail="ProjectData" />
@@ -9,49 +10,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="row" style="height: 500px">
-                    <div class="col-md-4 not_started_task">
-                        <div class="card card-header">
-                            <button class="btn btn-warning">Add Task</button>
-                        </div>
+                    <NotStartedColumn @openTaskModal="openTaskModal" />
 
-                        <div class="card card-body task_card" draggable="true">
-                            <p>Task Name</p>
+                    <PendingColumn />
 
-                            <div class="assignees">
-                                <button class="btn btn-primary member_1">I</button>
-                                <button class="btn btn-light member_2">J</button>
-                                <button class="btn btn-secondary member_3">K</button>
-                                3 Assignees
-                            </div>
-                        </div>
-
-                        <div class="card card-body task_card" draggable="true">
-                            <p>Task Name</p>
-
-                            <div class="assignees">
-                                <button class="btn btn-primary member_1">I</button>
-                                <button class="btn btn-light member_2">J</button>
-                                <button class="btn btn-secondary member_3">K</button>
-                                3 Assignees
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 pending_task">
-                        <div class="card card-header">
-                            <b>Pending</b>
-                        </div>
-
-                        <div class="card card-body"></div>
-                    </div>
-
-                    <div class="col-md-4 completed_task">
-                        <div class="card card-header">
-                            <b>Completed</b>
-                        </div>
-
-                        <div class="card card-body"></div>
-                    </div>
+                    <CompletedColumn />
                 </div>
             </div>
         </div>
@@ -65,10 +28,25 @@ import BreadCrumb from './components/BreadCrumb.vue';
 import ProjectDetail from "./components/ProjectData.vue";
 import ProjectProgress from './components/ProjectProgress.vue';
 import { onMounted } from 'vue';
+import NotStartedColumn from './components/tasks/NotStartedColumn.vue';
+import PendingColumn from './components/tasks/PendingColumn.vue';
+import CompletedColumn from './components/tasks/CompletedColumn.vue';
+import AddTaskModal from './components/tasks/AddTaskModal.vue';
+import { closeModal, openModal } from '../../../helpers/util';
 
 const route = useRoute();
 const { ProjectData, getProjectDetail } = useGetProjectDetail();
 const slug = route.query?.project as string;
+
+async function openTaskModal() {
+    openModal('taskModal').then(() => {
+        console.log('Model Opened...');
+    });
+}
+
+function closeTaskModal(){
+    closeModal('taskModal')
+}
 
 onMounted(async () => {
     await getProjectDetail(slug);
@@ -76,7 +54,7 @@ onMounted(async () => {
 });
 </script>
 
-<style >
+<style>
 .assignees button {
     border-radius: 50px;
     width: 40px;
