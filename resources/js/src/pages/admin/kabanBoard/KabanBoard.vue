@@ -1,6 +1,46 @@
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { useGetProjectDetail } from './actions/getProjectDetail';
+import BreadCrumb from './components/BreadCrumb.vue';
+import ProjectDetail from "./components/ProjectData.vue";
+import ProjectProgress from './components/ProjectProgress.vue';
+import { onMounted } from 'vue';
+import NotStartedColumn from './components/tasks/NotStartedColumn.vue';
+import PendingColumn from './components/tasks/PendingColumn.vue';
+import CompletedColumn from './components/tasks/CompletedColumn.vue';
+import AddTaskModal from './components/tasks/AddTaskModal.vue';
+import { closeModal, openModal } from '../../../helpers/util';
+import { taskStore } from './store/kabanStore';
+
+const route = useRoute();
+const { ProjectData, getProjectDetail } = useGetProjectDetail();
+const slug = route.query?.project as string;
+
+// this function is to open the pop up AddTaskModal.vue (taskModal).
+async function openTaskModal() {
+    openModal('taskModal').then(() => {
+        // passing the project id to the taskStore to use it in the pop up AddTaskModal.vue (taskModal).
+        taskStore.taskInput.project_id = ProjectData.value?.data.id;
+        console.log('Modal Opened...');
+    });
+}
+
+// this function is to close the pop up AddTaskModal.vue (taskModal).
+function closeTaskModal(){
+    closeModal('taskModal')
+}
+
+onMounted(async () => {
+    await getProjectDetail(slug);
+    console.log(slug);
+});
+</script>
+
 <template>
     <div class="row">
-        <AddTaskModal @closeModal="closeTaskModal" />
+        <AddTaskModal
+            @closeModal="closeTaskModal"
+        />
         <BreadCrumb />
         <ProjectDetail :ProjectDetail="ProjectData" />
         <ProjectProgress :ProjectDetail="ProjectData" />
@@ -20,39 +60,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { useGetProjectDetail } from './actions/getProjectDetail';
-import BreadCrumb from './components/BreadCrumb.vue';
-import ProjectDetail from "./components/ProjectData.vue";
-import ProjectProgress from './components/ProjectProgress.vue';
-import { onMounted } from 'vue';
-import NotStartedColumn from './components/tasks/NotStartedColumn.vue';
-import PendingColumn from './components/tasks/PendingColumn.vue';
-import CompletedColumn from './components/tasks/CompletedColumn.vue';
-import AddTaskModal from './components/tasks/AddTaskModal.vue';
-import { closeModal, openModal } from '../../../helpers/util';
-
-const route = useRoute();
-const { ProjectData, getProjectDetail } = useGetProjectDetail();
-const slug = route.query?.project as string;
-
-async function openTaskModal() {
-    openModal('taskModal').then(() => {
-        console.log('Model Opened...');
-    });
-}
-
-function closeTaskModal(){
-    closeModal('taskModal')
-}
-
-onMounted(async () => {
-    await getProjectDetail(slug);
-    console.log(slug);
-});
-</script>
 
 <style>
 .assignees button {
