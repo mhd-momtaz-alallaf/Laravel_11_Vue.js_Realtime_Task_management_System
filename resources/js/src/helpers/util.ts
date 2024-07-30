@@ -71,3 +71,12 @@ export function closeModal(element: string) {
         }
     }
 }
+
+// This function returns the first letter of the given member name.
+export function getFirstChar(str: string | undefined): string {
+    if (!str) {
+        return 'I'; // Return an empty string if the input is undefined or empty.
+    }
+
+    return str.charAt(0).toUpperCase(); // Get the first character and convert it to uppercase.
+}
