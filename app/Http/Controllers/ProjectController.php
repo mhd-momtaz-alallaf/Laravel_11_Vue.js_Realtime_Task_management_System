@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewProjectCreated;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ProjectRequest;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskProgress;
@@ -37,7 +38,8 @@ class ProjectController extends Controller
         // loading the tasks relation with task_members and each member of the task, and the task_progress relation.
         $project->load(['tasks.task_members.member','task_progress']);
 
-        return response()->json(['data' => $project], 200);
+        return new ProjectResource($project);
+        // return response()->json(['data' => $project], 200);
     }
 
     // Create new project.
