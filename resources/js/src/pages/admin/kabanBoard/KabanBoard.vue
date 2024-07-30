@@ -50,11 +50,11 @@ onMounted(async () => {
         <div class="card">
             <div class="card-body">
                 <div class="row" style="height: 500px">
-                    <NotStartedColumn @openTaskModal="openTaskModal" />
+                    <NotStartedColumn :projectData="ProjectData" @openTaskModal="openTaskModal" />
 
-                    <PendingColumn />
+                    <PendingColumn :projectData="ProjectData" />
 
-                    <CompletedColumn />
+                    <CompletedColumn :projectData="ProjectData" />
                 </div>
             </div>
         </div>
@@ -62,19 +62,9 @@ onMounted(async () => {
 </template>
 
 <style>
-.assignees button {
-    border-radius: 50px;
-    width: 40px;
-    height: 40px;
-    border: 1px solid grey;
-}
-.assignees .member_2 {
-    position: relative;
-    left: -10px;
-}
-.assignees .member_3 {
-    position: relative;
-    left: -20px;
+.scrollable-tasks {
+  height: 440px;
+  overflow-y: auto;
 }
 .task_card {
     padding: 10px;
@@ -85,6 +75,32 @@ onMounted(async () => {
 }
 .pending_task {
     background-color: rgb(240, 242, 242);
+}
+.assignees button {
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid whitesmoke;
+}
+.assignees .member_1 {
+    position: relative;
+    left: -10px;
+}
+.assignees .member_2 {
+    position: relative;
+    left: -20px;
+}
+.assignees .member_3 {
+    position: relative;
+    left: -30px;
+}
+.assignees {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    justify-content: space-between; /* Space between buttons and assignees count */
+}
+.assignees-count {
+    margin-left: auto; /* Pushes the count to the right */
 }
 </style>
 
