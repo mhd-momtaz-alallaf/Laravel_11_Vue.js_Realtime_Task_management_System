@@ -19,14 +19,14 @@ class TaskController extends Controller
         return DB::transaction(function() use ($validated) {
             // creating a new task.
             $task = Task::create([
-                'project_id' => $validated['projectId'],
+                'project_id' => $validated['project_id'],
                 'name' => $validated['name'],
                 'status' => Task::NOT_STARTED,
             ]);
 
             // creating $taskMembers array of objects, and assigning each element of memberIds array with its TaskMember object.
             $taskMembers = array_map(fn($memberId) => [
-                'project_id' => $validated['projectId'],
+                'project_id' => $validated['project_id'],
                 'task_id' => $task->id,
                 'member_id' => $memberId,
             ], $validated['memberIds']);

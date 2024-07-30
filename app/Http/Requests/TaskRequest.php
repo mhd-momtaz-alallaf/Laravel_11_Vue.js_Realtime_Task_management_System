@@ -23,7 +23,7 @@ class TaskRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'projectId' => 'required|numeric',
+            'project_id' => 'required|numeric',
             'memberIds' => 'required|array',
             'memberIds.*'=>'numeric', // All the memberIds array items will be numeric.
         ];
