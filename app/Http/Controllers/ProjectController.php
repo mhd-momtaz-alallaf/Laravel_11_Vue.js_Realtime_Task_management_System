@@ -34,8 +34,8 @@ class ProjectController extends Controller
     // show a project details.
     public function show(Project $project)
     {
-        // loading the tasks relation with task_members and each member of the task.
-        $project->load(['tasks.task_members.member']);
+        // loading the tasks relation with task_members and each member of the task, and the task_progress relation.
+        $project->load(['tasks.task_members.member','task_progress']);
 
         return response()->json(['data' => $project], 200);
     }
