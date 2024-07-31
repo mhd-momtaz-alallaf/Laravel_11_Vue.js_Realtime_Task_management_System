@@ -8,13 +8,18 @@
             >
             <ol class="breadcrumb p-2 bg-body-tertiary rounded-3">
                 <li class="breadcrumb-item">
-                        <RouterLink>
-                            Create Project
-                        </RouterLink>
+                    <RouterLink to="/projects">
+                        Projects
+                    </RouterLink>
+                </li>
+                <li class="breadcrumb-item">
+                    <RouterLink>
+                        <slot name="project-name">Project Name</slot>
+                    </RouterLink>
                 </li>
                 <li class="breadcrumb-item" style="text-decoration: none">
-                    <RouterLink to="/projects">
-                        <b>Projects</b>
+                    <RouterLink>
+                        <b>Tasks</b>
                     </RouterLink>
                 </li>
             </ol>

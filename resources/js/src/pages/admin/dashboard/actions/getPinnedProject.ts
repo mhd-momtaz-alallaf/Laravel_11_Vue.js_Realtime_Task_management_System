@@ -6,9 +6,10 @@ import { successMsg } from "../../../../helpers/toast-notification";
 type pinnedProject = {
     id: number,
     name: string,
+    slug: string,
 };
 
-export type PinnedProjecType = {
+export type PinnedProjectType = {
     data: pinnedProject,
 };
 
@@ -16,7 +17,7 @@ export function useGetPinnedProject() {
     const project = ref<pinnedProject>({} as pinnedProject);
     async function getPinnedProject() {
         try {
-            const {data} = await makeHttpRequest<undefined, PinnedProjecType>(
+            const {data} = await makeHttpRequest<undefined, PinnedProjectType>(
                 `projects/get-pinned-project`,
                 'GET'
             );

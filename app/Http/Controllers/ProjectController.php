@@ -118,7 +118,7 @@ class ProjectController extends Controller
         $project = Project::whereHas('task_progress', function ($query) {
             $query->where('pinned_on_dashboard', true);
         })
-        ->select('id', 'name')
+        ->select('id', 'name', 'slug')
         ->first();
 
         return response()->json(['data' => $project]);

@@ -10,7 +10,6 @@ const { project, getPinnedProject } = useGetPinnedProject();
 const { projects, getTotalProjects } = useGetTotalProjects();
 const { chartData, getChartData } = useGetChartData();
 
-
 onMounted(async () => {
     await getPinnedProject();
     getChartData(project.value.id);
@@ -27,9 +26,12 @@ onMounted(async () => {
         <div class="row">
             <div class="col-md-8">
                 <!-- {{ project?.id }} -->
-                <h3 style="color: rgb(118, 119, 120)">
-                    Project :{{ project?.name }}
+                <h3>
+                    <router-link style="color: rgb(118, 119, 120)" :to="'/kaban?project=' + project?.slug">
+                        Project :{{ project?.name }}
+                    </router-link>
                 </h3>
+                <br />
             </div>
         </div>
         <br /><br />
@@ -55,7 +57,7 @@ onMounted(async () => {
                     </div>
 
                     <div class="card-body">
-                        {{ chartData.tasks }}
+                        <!-- {{ chartData.tasks }} -->
                         <div v-if="chartData.tasks">
                             <ApexDonut :task="chartData.tasks" />
                         </div>
@@ -85,3 +87,9 @@ onMounted(async () => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.card-body {
+    height: 200px; /* Customize the cards height */
+}
+</style>
