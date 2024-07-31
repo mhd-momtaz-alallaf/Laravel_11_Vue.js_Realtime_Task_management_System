@@ -15,7 +15,7 @@ const emit = defineEmits<{
 <template>
     <div class="col-md-4 not_started_task">
         <div class="card card-header">
-            <button @click="emit('openTaskModal')" class="btn btn-warning">Add Task</button>
+            <button @click="emit('openTaskModal')" class="new-task btn btn-warning">Add New Task</button>
         </div>
 
         <div class="scrollable-tasks">
@@ -37,7 +37,7 @@ const emit = defineEmits<{
                         </button>
                     </div>
                     <div class="assignees-count">
-                        {{ task?.task_members.length }} assignees
+                        {{ task?.task_members.length }} Assignees
                     </div>
                 </div>
             </div>
