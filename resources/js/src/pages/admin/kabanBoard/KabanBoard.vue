@@ -31,7 +31,12 @@ function closeTaskModal(){
     closeModal('taskModal')
 }
 
-const { fromNotStartedToPending, fromPendingToCompleted, fromCompletedToPending, fromPendingToNotStarted } = useDragTask();
+const {
+    fromNotStartedToPending,
+    fromPendingToCompleted,
+    fromCompletedToPending,
+    fromPendingToNotStarted
+} = useDragTask(getProjectDetail, slug);
 
 onMounted(async () => {
     await getProjectDetail(slug);
