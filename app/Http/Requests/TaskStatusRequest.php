@@ -23,6 +23,7 @@ class TaskStatusRequest extends FormRequest
     {
         return [
             'taskId' => 'required|numeric',
+            'project_id' => 'required|numeric',
         ];
     }
 }

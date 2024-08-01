@@ -42,6 +42,7 @@ class TaskController extends Controller
     public function updateTaskStatusToPending(TaskStatusRequest $request)
     {
         Task::changeTaskStatus($request->validated()['taskId'], Task::PENDING);
+        Task::handleProjectProgress($request->validated()['project_id']);
 
         return response()->json(['message' => 'Task Moved to pending'], 200);
     }
