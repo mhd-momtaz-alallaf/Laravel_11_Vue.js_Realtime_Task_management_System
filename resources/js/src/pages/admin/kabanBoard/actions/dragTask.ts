@@ -85,6 +85,21 @@ export function useDragTask(fn:(slug:string) => Promise<void>, slug: string) { /
             completedColumn.append(pendingTask);
             completedColumn.classList.remove("hovered");
             isDragged = false;
+
+            taskStore.currentTaskId = taskId;
+            // console.log('drop event') is sending many request to the server, so we will send only one http request by this check.
+            if (!completedColumn.getAttribute("data-listeners-added")) {
+                completedColumn.setAttribute("data-listeners-added", "true");
+
+                setTimeout(async() => {
+                    await Promise.all([
+                        changeTaskStatus(taskStore.currentTaskId, project_id, 'tasks/change-status-to-completed'),
+                        fn(slug),
+                    ]);
+
+                    completedColumn.removeAttribute("data-listeners-added");
+                }, 200);
+            }
         });
     }
 
@@ -117,6 +132,21 @@ export function useDragTask(fn:(slug:string) => Promise<void>, slug: string) { /
             pendingColumn.append(completedTask);
             pendingColumn.classList.remove("hovered");
             isDragged = false;
+
+            taskStore.currentTaskId = taskId;
+            // console.log('drop event') is sending many request to the server, so we will send only one http request by this check.
+            if (!pendingColumn.getAttribute("data-listeners-added")) {
+                pendingColumn.setAttribute("data-listeners-added", "true");
+
+                setTimeout(async() => {
+                    await Promise.all([
+                        changeTaskStatus(taskStore.currentTaskId, project_id, 'tasks/change-status-to-pending'),
+                        fn(slug),
+                    ]);
+
+                    pendingColumn.removeAttribute("data-listeners-added");
+                }, 200);
+            }
         });
     }
 
@@ -150,7 +180,20 @@ export function useDragTask(fn:(slug:string) => Promise<void>, slug: string) { /
             notStartedColumn.classList.remove("hovered");
             isDragged = false;
 
+            taskStore.currentTaskId = taskId;
+            // console.log('drop event') is sending many request to the server, so we will send only one http request by this check.
+            if (!notStartedColumn.getAttribute("data-listeners-added")) {
+                notStartedColumn.setAttribute("data-listeners-added", "true");
 
+                setTimeout(async() => {
+                    await Promise.all([
+                        changeTaskStatus(taskStore.currentTaskId, project_id, 'tasks/change-status-to-not-started'),
+                        fn(slug),
+                    ]);
+
+                    notStartedColumn.removeAttribute("data-listeners-added");
+                }, 200);
+            }
         });
     }
 
