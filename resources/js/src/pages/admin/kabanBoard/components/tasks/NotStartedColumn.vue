@@ -9,6 +9,7 @@ defineProps<{
 
 const emit = defineEmits<{
     (e:'openTaskModal'): Promise<void>;
+    (e:'fromNotStartedToPending',taskId: number, projectId: number): Promise<void>
 }>();
 </script>
 
@@ -24,7 +25,8 @@ const emit = defineEmits<{
                 v-for="task in projectData?.data?.tasks"
                 :key="task.id"
                 draggable="true"
-                :class="'card card-body task_card notStartedTask_'+task.id"
+                :class="'card card-body task_card notStartedTask_' + task.id"
+                @drag="emit('fromNotStartedToPending', task.id, projectData?.data?.id)"
             >
                 <p>{{task.name}}</p>
                 <div class="assignees">
