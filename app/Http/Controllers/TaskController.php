@@ -51,6 +51,7 @@ class TaskController extends Controller
     public function updateTaskStatusToCompleted(TaskStatusRequest $request)
     {
         Task::changeTaskStatus($request->validated()['taskId'], Task::COMPLETED);
+        Task::handleProjectProgress($request->validated()['project_id']);
 
         return response()->json(['message' => 'Task Moved to completed'], 200);
     }
@@ -59,6 +60,7 @@ class TaskController extends Controller
     public function updateTaskStatusToNotStarted(TaskStatusRequest $request)
     {
         Task::changeTaskStatus($request->validated()['taskId'], Task::NOT_STARTED);
+        Task::handleProjectProgress($request->validated()['project_id']);
 
         return response()->json(['message' => 'Task Moved to not started'], 200);
     }
