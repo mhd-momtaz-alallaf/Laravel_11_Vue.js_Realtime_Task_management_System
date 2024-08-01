@@ -5,6 +5,10 @@ import { SingleProjectResponseType, TaskStatus} from "../../actions/getProjectDe
 defineProps<{
     projectData: SingleProjectResponseType;
 }>();
+
+const emit = defineEmits<{
+    (e: "fromCompletedToPending", taskId: number, projectId: number): Promise<void>;
+}>();
 </script>
 
 <template>
@@ -20,6 +24,7 @@ defineProps<{
                 :key="task.id"
                 draggable="true"
                 :class="'card card-body task_card completedTask_'+task.id"
+                @drag="emit('fromCompletedToPending', task.id, projectData?.data?.id)"
             >
                 <p>{{task.name}}</p>
                 <div class="assignees">
