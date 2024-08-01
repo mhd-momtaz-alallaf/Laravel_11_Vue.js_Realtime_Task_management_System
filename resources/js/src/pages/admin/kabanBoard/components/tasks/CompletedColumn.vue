@@ -7,7 +7,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: "fromCompletedToPending", taskId: number, projectId: number): Promise<void>;
+    (e: "fromCompletedToPending", taskId: number, project_id: number): Promise<void>;
 }>();
 </script>
 
