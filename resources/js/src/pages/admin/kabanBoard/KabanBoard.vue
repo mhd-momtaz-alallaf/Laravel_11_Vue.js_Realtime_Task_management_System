@@ -11,6 +11,7 @@ import CompletedColumn from './components/tasks/CompletedColumn.vue';
 import AddTaskModal from './components/tasks/AddTaskModal.vue';
 import { closeModal, openModal } from '../../../helpers/util';
 import { taskStore } from './store/kabanStore';
+import { useDragTask } from './actions/dragTask';
 
 const route = useRoute();
 const { ProjectData, getProjectDetail } = useGetProjectDetail();
@@ -30,6 +31,8 @@ function closeTaskModal(){
     closeModal('taskModal')
 }
 
+const { fromNotStartedToPending, fromPendingToCompleted, fromCompletedToPending, fromPendingToNotStarted } = useDragTask();
+
 onMounted(async () => {
     await getProjectDetail(slug);
     console.log(slug);
@@ -41,7 +44,7 @@ onMounted(async () => {
         <AddTaskModal
             @closeModal="closeTaskModal"
         />
-        <BreadCrumb />
+        <BreadCrumb><template #project-name>{{ slug }}</template></BreadCrumb>
         <ProjectDetail :ProjectDetail="ProjectData" />
         <ProjectProgress :ProjectDetail="ProjectData" />
 
@@ -49,12 +52,23 @@ onMounted(async () => {
 
         <div class="card">
             <div class="card-body">
-                <div class="row" style="height: 500px">
-                    <NotStartedColumn :projectData="ProjectData" @openTaskModal="openTaskModal" />
+                <div class="row" style="height: 570px">
+                    <NotStartedColumn
+                        :projectData="ProjectData"
+                        @openTaskModal="openTaskModal"
+                        @fromNotStartedToPending="fromNotStartedToPending"
+                    />
 
-                    <PendingColumn :projectData="ProjectData" />
+                    <PendingColumn
+                        :projectData="ProjectData"
+                        @fromPendingToCompleted="fromPendingToCompleted"
+                        @fromPendingToNotStarted="fromPendingToNotStarted"
+                     />
 
-                    <CompletedColumn :projectData="ProjectData" />
+                    <CompletedColumn
+                        :projectData="ProjectData"
+                        @fromCompletedToPending="fromCompletedToPending"
+                    />
                 </div>
             </div>
         </div>
@@ -62,16 +76,32 @@ onMounted(async () => {
 </template>
 
 <style>
+.hovered{
+    border:2px dashed rgb(157, 156, 156);
+    border-radius: 5px;
+}
+.card-header {
+    height: 50px !important; /* Force the height to 10px */
+    overflow: hidden; /* Hide any overflow content */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    padding: 50 !important;
+}
 .scrollable-tasks {
-  height: 440px;
+  height: 520px;
   overflow-y: auto;
 }
 .task_card {
     padding: 10px;
     margin-top: 7px;
 }
+.card-header .btn .new-task{
+    width: 200px; /* Customize the button width */
+    height: 45px; /* Customize the button height */
+}
 .not_started_task {
-    background-color: aliceblue;
+    background-color: rgb(239, 244, 251);
 }
 .pending_task {
     background-color: rgb(240, 242, 242);
@@ -101,6 +131,28 @@ onMounted(async () => {
 }
 .assignees-count {
     margin-left: auto; /* Pushes the count to the right */
+}
+/* Total scrollbar width */
+.scrollable-tasks::-webkit-scrollbar {
+    width: 4px;
+    height: 8px; /* For horizontal scrollbar if needed */
+}
+
+/* Track */
+.scrollable-tasks::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* Handle */
+.scrollable-tasks::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.scrollable-tasks::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
 
