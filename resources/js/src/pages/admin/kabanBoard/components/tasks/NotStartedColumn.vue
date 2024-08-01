@@ -9,7 +9,7 @@ defineProps<{
 
 const emit = defineEmits<{
     (e:'openTaskModal'): Promise<void>;
-    (e:'fromNotStartedToPending',taskId: number, projectId: number): Promise<void>
+    (e:'fromNotStartedToPending',taskId: number, project_id: number): Promise<void>;
 }>();
 </script>
 
