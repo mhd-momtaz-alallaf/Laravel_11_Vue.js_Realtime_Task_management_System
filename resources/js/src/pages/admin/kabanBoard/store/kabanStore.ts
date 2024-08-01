@@ -9,7 +9,7 @@ const useTaskStore = defineStore('task', {
             memberIds: [],
         } as CreateTaskInput,
         edit: false,
-        currentTaskId:0 as number,
+        currentTaskId: 0 as number,
     }),
 });
 
