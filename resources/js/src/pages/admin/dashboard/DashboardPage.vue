@@ -62,7 +62,7 @@ onMounted(async () => {
                             <ApexDonut :task="chartData.tasks" />
                         </div>
                         <div v-else>
-                            <ApexDonut :task="[0, 0, 0]" />
+                            <ApexDonut :task="chartData.tasks" />
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@ onMounted(async () => {
                             <ApexRadialBar :percent="chartData.progress" />
                         </div>
                         <div v-else>
-                            <ApexRadialBar :percent=0 />
+                            <ApexRadialBar :percent="chartData.progress" />
                         </div>
                         <br />
                     </div>
