@@ -16,10 +16,22 @@ export function useGetChartData() {
                 'GET'
             );
             chartData.value = data;
+            updateData();
         } catch (error) {
             showErrorResponse(error);
         }
     };
+
+    // using laravel reverb to update the projects Progress in realtime with each time a task status of a Project is changed.
+    function updateData() {
+        // listening to 'projectProgressChannel' of 'TrackingProjectProgress' Event.
+        window.Echo.channel("projectProgressChannel").listen("TrackingProjectProgress", (e: {projectProgress: number}) => {
+            chartData.value.progress = 0; // initializing the progress.
+            setTimeout(() => chartData.value.progress = e.projectProgress, 300);
+            // console.log(e);
+            }
+        );
+    }
 
     return { getChartData, chartData };
 };
