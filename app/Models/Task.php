@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\TrackingProjectProgress;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -80,9 +81,10 @@ class Task extends Model
         $taskProgress = TaskProgress::where('project_id', $projectId)->first();
 
         if (!is_null($taskProgress)) {
-
             $taskProgress->where('project_id', $projectId)
                 ->update(['progress' => $progress]);
+
+            TrackingProjectProgress::dispatch($progress);
 
             return $progress;
         }

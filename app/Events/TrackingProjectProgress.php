@@ -30,7 +30,7 @@ class TrackingProjectProgress implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('projectProgressChannel'),
+            new channel('projectProgressChannel'),
         ];
     }
 }
