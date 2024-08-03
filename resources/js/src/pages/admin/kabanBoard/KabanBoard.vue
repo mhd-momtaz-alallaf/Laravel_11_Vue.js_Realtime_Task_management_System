@@ -38,6 +38,10 @@ const {
     fromPendingToNotStarted
 } = useDragTask(getProjectDetail, slug);
 
+async function refreshKabanBoardAfterNewTask(){
+    await getProjectDetail(slug);
+}
+
 onMounted(async () => {
     await getProjectDetail(slug);
     console.log(slug);
@@ -48,6 +52,7 @@ onMounted(async () => {
     <div class="row">
         <AddTaskModal
             @closeModal="closeTaskModal"
+            @refreshKabanBoard="refreshKabanBoardAfterNewTask"
         />
         <BreadCrumb><template #project-name>{{ slug }}</template></BreadCrumb>
         <ProjectDetail :ProjectDetail="ProjectData" />
