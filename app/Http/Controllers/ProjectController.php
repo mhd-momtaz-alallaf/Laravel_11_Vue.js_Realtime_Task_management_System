@@ -144,16 +144,10 @@ class ProjectController extends Controller
         $taskProgress = TaskProgress::where('project_id', $project->id)
             ->value('progress');
 
-        $taskCounts = Task::where('project_id', $project->id)
-            ->selectRaw('SUM(status = ?) as not_started, SUM(status = ?) as pending, SUM(status = ?) as completed', [Task::NOT_STARTED, Task::PENDING, Task::COMPLETED])
-            ->first();
-
-        $not_started = (int) $taskCounts->not_started ?? 0;
-        $pending = (int) $taskCounts->pending ?? 0;
-        $completed = (int) $taskCounts->completed ?? 0;
+        $tasksCount = Task::countNotStartedAndPendingAndCompletedTasks($project->id);
 
         return response([
-            'tasks' => [$not_started, $pending, $completed],
+            'tasks' => $tasksCount,
             'progress' => (int) $taskProgress
         ]);
     }
