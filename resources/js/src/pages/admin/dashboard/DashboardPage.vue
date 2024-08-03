@@ -12,8 +12,8 @@ const { chartData, getChartData } = useGetChartData();
 
 onMounted(async () => {
     await getPinnedProject();
-    getChartData(project.value.id);
-    getTotalProjects();
+    await getChartData(project.value.id);
+    await getTotalProjects();
 });
 </script>
 
@@ -62,7 +62,7 @@ onMounted(async () => {
                             <ApexDonut :task="chartData.tasks" />
                         </div>
                         <div v-else>
-                            <ApexDonut :task="chartData.tasks" />
+                            <ApexDonut :task="[0, 0, 0]" />
                         </div>
                     </div>
                 </div>
