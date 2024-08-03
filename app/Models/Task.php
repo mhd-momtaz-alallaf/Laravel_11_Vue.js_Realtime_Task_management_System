@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\TrackingProjectProgress;
+use App\Events\TrackingProjectTasksCount;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,16 +44,17 @@ class Task extends Model
         return $count;
     }
 
-    public static function countCompletedAndPendingTasks($projectId)
+    public static function countNotStartedAndPendingAndCompletedTasks($projectId)
     {
         $taskCounts = Task::where('project_id', $projectId)
-            ->selectRaw('SUM(status = ?) as pending, SUM(status = ?) as completed', [Task::PENDING, Task::COMPLETED])
+            ->selectRaw('SUM(status = ?) as not_started, SUM(status = ?) as pending, SUM(status = ?) as completed', [Task::NOT_STARTED, Task::PENDING, Task::COMPLETED])
             ->first();
 
+        $not_started = (int) $taskCounts->not_started ?? 0;
         $pending = (int) $taskCounts->pending ?? 0;
         $completed = (int) $taskCounts->completed ?? 0;
 
-        return [$pending, $completed];
+        return [$not_started, $pending, $completed];
     }
 
     public static  function countProjectTasks($projectId)
@@ -84,6 +86,9 @@ class Task extends Model
             $taskProgress->where('project_id', $projectId)
                 ->update(['progress' => $progress]);
 
+            $tasksCount = Task::countNotStartedAndPendingAndCompletedTasks($projectId);
+
+            TrackingProjectTasksCount::dispatch($tasksCount);
             TrackingProjectProgress::dispatch($progress);
 
             return $progress;
