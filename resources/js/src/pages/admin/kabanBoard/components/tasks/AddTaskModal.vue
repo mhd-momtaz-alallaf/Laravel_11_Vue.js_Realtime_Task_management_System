@@ -14,6 +14,7 @@ const { selectMember, unSelectMember, clearAllSelectedMembers, selectedMembers }
 
 const emit = defineEmits<{
     (e: "closeModal"): void;
+    (e: "refreshKabanBoard",): Promise<void>;
 }>();
 
 const rules = {
@@ -34,6 +35,7 @@ async function submitTask() {
         taskStore.taskInput.memberIds = [];
         taskStore.taskInput.name = "";
         clearAllSelectedMembers();
+        emit('refreshKabanBoard');
         v$.value.$reset();
     } else{
         showError('Please select a member first!');
