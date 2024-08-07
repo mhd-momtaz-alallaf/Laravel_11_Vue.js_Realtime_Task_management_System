@@ -25,10 +25,11 @@
                             <!-- Using the Error Component -->
                             <Error
                                 label="Password"
+
                                 :errors="v$.password.$errors"
                             >
                                 <!-- Using the BaseInput Component -->
-                                <BaseInput v-model="loginInput.password"/>
+                                <BaseInput type="password" v-model="loginInput.password"/>
                             </Error>
                         </div>
 

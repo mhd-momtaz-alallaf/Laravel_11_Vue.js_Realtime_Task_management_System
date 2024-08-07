@@ -29,7 +29,7 @@
                                         :errors="v$.password.$errors"
                                     >
                                         <!-- Using the BaseInput Component -->
-                                        <BaseInput v-model="registerInput.password"/>
+                                        <BaseInput type="password" v-model="registerInput.password"/>
                                     </Error>
                                 </div>
 
